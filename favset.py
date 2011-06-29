@@ -46,7 +46,7 @@ class Index(FlickrBaseApp):
         photo_id_list = [photo['id'] for photo in popular]
         photo_ids = ",".join(photo_id_list)
 
-        if self.POST.get("doit", None):
+        if self.request.get("doit", None):
             if not photos:
                 return render_error("Noone loves you", "You have no photos favourited by other people.")
 
