@@ -14,7 +14,7 @@ class Index(FlickrBaseApp):
         self.flickr_ttl = 120
 
 
-    def get (self) :
+    def favset (self) :
         if not self.check_logged_in(self.min_perms) :
             return self.render("login.html", locals())
 
@@ -47,7 +47,7 @@ class Index(FlickrBaseApp):
         photo_ids = ",".join(photo_id_list)
 
         if self.request.get("doit", None):
-            if not photos:
+            if not popular:
                 return render_error("Noone loves you", "You have no photos favourited by other people.")
 
             if not fav_set:
@@ -61,7 +61,7 @@ class Index(FlickrBaseApp):
 
             else:
                 set_id = fav_set["id"]
-                primary = fav_st["primary"]
+                primary = fav_set["primary"]
 
             # reorder set
             self.flickr("photosets.editPhotos",
@@ -70,8 +70,16 @@ class Index(FlickrBaseApp):
                 photo_ids=photo_ids,
             )
 
-            return self.redirect("http://www.flickr.com/photos/%s/sets/%s"%(self.user.id, set_id))
+            return self.redirect("http://www.flickr.com/photos/%s/sets/%s"%(self.user.nsid, fav_set['id']))
 
 
         return self.render("index.html", locals())
     
+
+    def get (self) :
+        return self.favset()
+        
+
+    def post (self) :
+        return self.favset()
+
