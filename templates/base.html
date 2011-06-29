@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <title>favset</title>
+  <link rel="stylesheet" href="/static/style.css" type="text/css">
+<!--  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script> -->
+</head>
+
+<body>
+
+<div id="header">
+    <div class="control">
+    {% if self.user %}
+        <form method="POST" action="signout">
+        <input type="hidden" name="crumb" value="{{ crumb }}">
+        <input class="button" type="submit" value="Log out">
+        </form>
+
+        <p>Logged in as <em>{{ self.user.username }}</em></p>
+    {% else %}
+        <p>Not logged in</p>
+    {% endif %}
+    </div>
+
+    <h1><a href="/">favset</a></h1>
+    <div style="clear: both"></div>
+    
+</div>
+
+<div id="content">
+{% block content %}
+{% endblock %}
+</div>
+
+<div id="footer">
+    <span>Another fine <a href="http://code.movieos.org">Tom Insam product</a>. Based on an <a href="http://notes.husk.org/post/7035845755/your-favourites-set-script">original script by Paul Mison</a></span>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block content %}
+
+{% if fav_set %}
+<p>You have an <a href="http://www.flickr.com/photos/{{self.user.id}}/sets/{{set_id}}">existing Your Favourites set</a> that I'll update with the following photos:</p>
+{% else %}
+<p>I'll create a photoset called "Your Favourites" with the following photos:</p>
+{% endif %}
+
+<div id="photos" style="width: 730">
+{% for photo in popular %}
+<img style="float: left; width: 75; height: 75; margin: 5px; padding: 0;" src="http://farm{{photo.farm}}.static.flickr.com/{{photo.server}}/{{photo.id}}_{{photo.secret}}_t.jpg">
+{% endif %}
+</div>
+
+<form method="post" action="/">
+    <input type="submit" value="Create / update set" name="doit">
+</form>
+
+{% endblock %}
