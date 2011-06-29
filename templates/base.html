@@ -4,7 +4,6 @@
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
   <title>favset</title>
   <link rel="stylesheet" href="/static/style.css" type="text/css">
-<!--  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script> -->
 </head>
 
 <body>
@@ -13,13 +12,12 @@
     <div class="control">
     {% if self.user %}
         <form method="POST" action="signout">
+        Logged in as <em>{{ self.user.username }}</em>
         <input type="hidden" name="crumb" value="{{ crumb }}">
         <input class="button" type="submit" value="Log out">
         </form>
-
-        <p>Logged in as <em>{{ self.user.username }}</em></p>
     {% else %}
-        <p>Not logged in</p>
+        Not logged in
     {% endif %}
     </div>
 

@@ -3,6 +3,10 @@ import os
 import wsgiref.handlers
 from google.appengine.ext import webapp
 
+from google.appengine.dist import use_library
+use_library('django', '1.2')
+
+
 import auth, favset
 
 if __name__ == '__main__':

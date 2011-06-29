@@ -4,7 +4,7 @@
 <h2 class="error">{{ error }}</h2>
 
 {% if suberror %}
-<p class="error">{{ suberror }}</p>
+<p class="error">{{ suberror|safe }}</p>
 {% endif %}
 
 {% if stack %}

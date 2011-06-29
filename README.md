@@ -10,5 +10,5 @@
 
 Alright.
 
-<http://favset.appspot.com>
+<http://favset.movieos.org>
 
