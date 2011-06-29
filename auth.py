@@ -40,7 +40,7 @@ class FlickrBaseApp(FlickrApp) :
         return ret
         
     def handle_exception(self, exception, debug_mode):
-        error = u"%s: %s"%( exception.__class__.__name__, exception.value)
+        error = u"%s: %s"%( exception.__class__.__name__, exception)
         stack = traceback.format_exc()
 
         logging.error(exception)
