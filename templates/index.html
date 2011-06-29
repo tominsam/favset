@@ -10,7 +10,7 @@
 <div id="photos" style="width: 730">
 {% for photo in popular %}
 <img style="float: left; width: 75; height: 75; margin: 5px; padding: 0;" src="http://farm{{photo.farm}}.static.flickr.com/{{photo.server}}/{{photo.id}}_{{photo.secret}}_t.jpg">
-{% endif %}
+{% endfor %}
 </div>
 
 <form method="post" action="/">
