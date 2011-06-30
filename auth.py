@@ -19,9 +19,10 @@ class FlickrBaseApp(FlickrApp) :
         self.min_perms = config['flickr_minperms']
         self.flickr_ttl = 120
     
-    def render(self, name, params):
+    def render(self, name, params = {}):
         path = os.path.join(TEMPLATE_BASE, name)
-        self.response.out.write(template.render(path, params))
+        combined = dict(self.__dict__.items() + params.items())
+        self.response.out.write(template.render(path, combined))
 
     def render_error(self, error, suberror):
         path = os.path.join(TEMPLATE_BASE, "error.html")

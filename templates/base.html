@@ -11,9 +11,9 @@
 
 <div id="header">
     <div class="control">
-    {% if self.user %}
+    {% if user %}
         <form method="POST" action="signout">
-        Logged in as <em>{{ self.user.username }}</em>
+        Logged in as <em>{{ user.username }}</em>
         <input type="hidden" name="crumb" value="{{ crumb }}">
         <input class="button" type="submit" value="Log out">
         </form>

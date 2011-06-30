@@ -11,75 +11,94 @@ SET_TITLE="Your Favourites"
 class Index(FlickrBaseApp):
     def __init__(self):
         super(Index,self).__init__()
-        self.flickr_ttl = 120
+        self.flickr_ttl = 1 # debugging
 
 
-    def favset (self) :
-        if not self.check_logged_in(self.min_perms) :
-            return self.render("login.html", locals())
+    def favset (self):
+        # common stuff for get + post
 
-        photosets = self.flickr("photosets.getList")[u'photosets'][u'photoset']
-        logging.info("sets are %r"%photosets)
-        
-        def is_your_favourites(set):
-            return set["title"]["_content"] == SET_TITLE
-        fav_sets = filter(is_your_favourites, photosets)
+        self.photosets = self.flickr("photosets.getList")[u'photosets'][u'photoset']
+        # hack the response format to be usable from template
+        for pset in self.photosets:
+            pset["title"] = pset["title"]["_content"]
+            
+        # look for the photoset we're interested in
+        set_id = self.request.get("photoset", None) # from form
+        def is_your_favourites(pset):
+            if set_id:
+                return pset["id"] == set_id
+            else:
+                # find 'Your Favourites' set based on title
+                return pset["title"] == SET_TITLE
+
+        fav_sets = filter(is_your_favourites, self.photosets)
         if len(fav_sets) > 0:
-            fav_set = fav_sets[0]
+            self.fav_set = fav_sets[0]
         else:
-            fav_set = None
-        logging.info("Found favourites set %r"%fav_set)
+            self.fav_set = None
+        
+        logging.info("picked fav_set %r"%self.fav_set)
 
         try:
-            popular = self.flickr("stats.getPopularPhotos", 
+            self.popular = self.flickr("stats.getPopularPhotos", 
                 sort='favorites',
                 per_page=str(9*8) # makes a nice square on the sets page.
             )['photos']['photo']
 
         except FlickrAppAPIException, e:
             if e.value == "User does not have stats":
-                return self.render_error("You don't have stats enabled.", "Visit <a target='_blank' href='http://flickr.com/photos/me/stats/'>http://flickr.com/photos/me/stats/</a>")
+                return self.render_error("You don't have stats enabled.", "Visit <a target='_blank' href='http://flickr.com/photos/me/stats/'>http://flickr.com/photos/me/stats/</a> to turn it on, then come back tomorrow.")
             else:
                 raise
-        logging.info("popular is %r"%popular)
-
-        photo_id_list = [photo['id'] for photo in popular]
-        photo_ids = ",".join(photo_id_list)
-
-        if self.request.get("doit", None):
-            if not popular:
-                return render_error("Noone loves you", "You have no photos favourited by other people.")
-
-            if not fav_set:
-                # create set
-                ret = self.flickr("photosets.create",
-                    title=SET_TITLE,
-                    primary_photo_id=photos[0]["id"]
-                )
-                set_id = ret["id"]
-                primary = photos[0]["id"]
-
-            else:
-                set_id = fav_set["id"]
-                primary = fav_set["primary"]
-
-            # reorder set
-            self.flickr("photosets.editPhotos",
-                photoset_id=set_id,
-                primary_photo_id=primary,
-                photo_ids=photo_ids,
-            )
-
-            return self.redirect("http://www.flickr.com/photos/%s/sets/%s"%(self.user.nsid, fav_set['id']))
 
 
-        return self.render("index.html", locals())
-    
+    def get(self):
+        if not self.check_logged_in(self.min_perms) :
+            return self.render("login.html")
 
-    def get (self) :
-        return self.favset()
+        self.favset()
+
+        return self.render("index.html")
+
         
 
-    def post (self) :
-        return self.favset()
+    def post(self):
+        if not self.check_logged_in(self.min_perms) :
+            return self.render("login.html")
+
+        self.favset()
+
+        if not self.popular:
+            return render_error("No-one loves you", "You have no photos favourited by other people. I can't make you a set. Sorry.")
+
+        if not self.fav_set:
+            # create set
+            ret = self.flickr("photosets.create",
+                title=SET_TITLE,
+                primary_photo_id=self.popular[0]["id"]
+            )
+            set_id = ret["photoset"]["id"]
+            primary = self.popular[0]["id"]
+
+        else:
+            set_id = self.fav_set["id"]
+            primary = self.fav_set["primary"]
+
+        # list of IDs for faves
+        photo_id_list = [photo['id'] for photo in self.popular]
+        
+        # force sanity on primary photo id.
+        if not primary in photo_id_list:
+            primary = photo_id_list[0]
+
+        photo_ids = ",".join(photo_id_list)
+
+        # reorder set
+        self.flickr("photosets.editPhotos",
+            photoset_id=set_id,
+            primary_photo_id=primary,
+            photo_ids=photo_ids,
+        )
+
+        return self.redirect("http://www.flickr.com/photos/%s/sets/%s"%(self.user.nsid, set_id))
 
