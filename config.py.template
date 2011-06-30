@@ -2,6 +2,6 @@ config = {
     # Flickr API keys. Get your own: http://www.flickr.com/services/apps/create/apply/
     'flickr_apikey' : 'api key',
     'flickr_apisecret' : 'api secret',
-    'flickr_minperms' : 'read',
+    'flickr_minperms' : 'write',
     'javascript_logging' : 0,
 };
