@@ -7,13 +7,14 @@
 <p>I'll create a photoset called "Your Favourites" with the following photos:</p>
 {% endif %}
 
-<div id="photos" style="width: 730">
+<div id="photos">
 {% for photo in popular %}
-  <img style="float: left; width: 75; height: 75; margin: 5px; padding: 0;" src="http://farm{{photo.farm}}.static.flickr.com/{{photo.server}}/{{photo.id}}_{{photo.secret}}_s.jpg" title="{% if photo.title %}{{photo.title}}, {% endif %}{{photo.stats.favorites}} favourites">
+  <img style="float: left; width: 75; height: 75; margin: 2px; padding: 0;" src="http://farm{{photo.farm}}.static.flickr.com/{{photo.server}}/{{photo.id}}_{{photo.secret}}_s.jpg" title="{% if photo.title %}{{photo.title}}, {% endif %}{{photo.stats.favorites}} favourites">
   {% if forloop.counter|divisibleby:"9" %}
     <br clear="all">
   {% endif %}
 {% endfor %}
+<br clear="all">
 </div>
 
 <br clear="all">

@@ -47,16 +47,20 @@ class Index(FlickrBaseApp):
 
         except FlickrAppAPIException, e:
             if e.value == "User does not have stats":
-                return self.render_error("You don't have stats enabled.", "Visit <a target='_blank' href='http://flickr.com/photos/me/stats/'>http://flickr.com/photos/me/stats/</a> to turn it on, then come back tomorrow.")
+                self.render_error("You don't have stats enabled.", "Visit <a target='_blank' href='http://flickr.com/photos/me/stats/'>http://flickr.com/photos/me/stats/</a> to turn it on, then come back tomorrow.")
+                return False
             else:
                 raise
+
+        return True
 
 
     def get(self):
         if not self.check_logged_in(self.min_perms) :
             return self.render("login.html")
 
-        self.favset()
+        if not self.favset():
+            return
 
         return self.render("index.html")
 
@@ -66,7 +70,8 @@ class Index(FlickrBaseApp):
         if not self.check_logged_in(self.min_perms) :
             return self.render("login.html")
 
-        self.favset()
+        if not self.favset():
+            return
 
         if not self.popular:
             return render_error("No-one loves you", "You have no photos favourited by other people. I can't make you a set. Sorry.")

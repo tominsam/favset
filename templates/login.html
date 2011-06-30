@@ -1,6 +1,30 @@
 {% extends "base.html" %}
 {% block content %}
 
-<a class="connect" href="/signin">tap here to sign in using Flickr</a>
+<img style="float: right; margin: 0 0 0 20px;" src="/static/screenshot.jpg">
+
+<p><a href="http://notes.husk.org/post/7035845755/your-favourites-set-script">Paul Mison wrote a nice tool</a>
+recently:</p>
+
+<blockquote>
+For a long time, I’ve maintained a set called Your Favourites on Flickr, which
+contains those photos that lots of people have marked as, well, a favourite.
+</blockquote>
+
+<p>This is a web implementation of Paul's script. Give it rights to create
+photosets, and it'll make you a set of the 72 photos in your account that have
+the most favourites from other Flickr users. (72, because it makes a nice
+square on your set page). You'll need
+<a href="http://flickr.com/photos/me/stats/">Flickr stats</a> turned on for
+this to work, unfortunately.</p>
+
+<p>favset is based on an <a href="http://notes.husk.org/post/7035845755/your-favourites-set-script">original
+    script by Paul Mison</a>, and the <a href="https://github.com/straup/gae-flickrapp/">gae-flickrapp</a>
+    framework by Aaron Straup Cope. It is hosted on <a href="http://appengine.google.com/">Google App Engine</a>.</p>
+
+<div style="clear: both"></div>
+
+<a class="connect" href="/signin">click here to sign in using Flickr</a>
+
 
 {% endblock %}
