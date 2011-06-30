@@ -2,7 +2,7 @@
 {% block content %}
 
 {% if fav_set %}
-<p>You have an <a href="http://www.flickr.com/photos/{{self.user.nsid}}/sets/{{fav_set.id}}">existing Your Favourites set</a> that I'll update with the following photos:</p>
+<p>You have an <a href="http://www.flickr.com/photos/{{user.nsid}}/sets/{{fav_set.id}}">existing set, "{{ fav_set.title }}"</a>, that I'll update with the following photos:</p>
 {% else %}
 <p>I'll create a photoset called "Your Favourites" with the following photos:</p>
 {% endif %}
@@ -19,7 +19,18 @@
 <br clear="all">
 
 <form method="post" action="/">
-    <input type="submit" value="Create / update set" name="doit">
+
+{% if photosets %}
+    <p>Prefer me to use a different photoset as your Favourites set?</p>
+    <p><select name="photoset" id="photoset">
+        <option value="new" {% if not fav_set %}selected{% endif %}>Create "Your Favourites" set</option>
+        {% for set in photosets %}
+            <option value="{{set.id}}" {% if set.id == fav_set.id %}selected{% endif %}>{{set.title}}</option>
+        {% endfor %}
+    </select></p>
+{% endif %}
+
+<input type="submit" value="Create / update set" name="doit">
 </form>
 
 {% endblock %}
