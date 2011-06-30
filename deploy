@@ -1,1 +1,1 @@
-appcfg.py update . --email tom@movieos.org
+python2.5 `which appcfg.py` update . --email tom@movieos.org

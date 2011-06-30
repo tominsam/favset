@@ -1,1 +1,1 @@
-dev_appserver.py . -a 0.0.0.0
+python2.5 `which dev_appserver.py` . -a 0.0.0.0
